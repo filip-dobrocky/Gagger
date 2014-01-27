@@ -1,0 +1,15 @@
+{
+    "architecture": "all",
+    "description": "description of Gagger",
+    "framework": "ubuntu-sdk-13.10",
+    "hooks": {
+        "Gagger": {
+            "apparmor": "Gagger.json",
+            "desktop": "Gagger.desktop"
+        }
+    },
+    "maintainer": "",
+    "name": "com.ubuntu.developer.username.gagger",
+    "title": "Gagger",
+    "version": "0.1"
+}

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Gagger
+Comment=An unofficial 9gag.com browser
+Exec=/usr/bin/qmlscene $@ /usr/share/Gagger/Gagger.qml
+Icon=./graphics/Gagger.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true

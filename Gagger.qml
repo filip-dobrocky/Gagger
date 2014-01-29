@@ -30,7 +30,7 @@ MainView {
     objectName: "mainView"
 
     // Note! applicationName needs to match the "name" field of the click manifest
-    applicationName: "com.ubuntu.developer.filip-dobrocky.Gagger"
+    applicationName: "com.ubuntu.developer.filip-dobrocky.gagger"
 
     /*
      This property enables the application to change orientation
@@ -38,9 +38,9 @@ MainView {
     */
     //automaticOrientation: true
 
-    headerColor: "#0f0f0f"
-    backgroundColor: "#282828"
-    footerColor: "#474747"
+    headerColor: "#101010"
+    backgroundColor: "#383838"
+    footerColor: "#666666"
 
     width: units.gu(45)
     height: units.gu(75)

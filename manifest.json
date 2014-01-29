@@ -1,6 +1,6 @@
 {
     "architecture": "all",
-    "description": "description of Gagger",
+    "description": "An unofficial 9gag.com browser",
     "framework": "ubuntu-sdk-13.10",
     "hooks": {
         "Gagger": {

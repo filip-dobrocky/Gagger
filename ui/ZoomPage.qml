@@ -55,6 +55,8 @@ Page {
         ActivityIndicator {
             id: imageLoading
             anchors.centerIn: parent
+
+            running: (image.status == Image.Ready) ? false : true
         }
 
         Flickable {
@@ -72,17 +74,6 @@ Page {
                 asynchronous: true
                 cache: false
                 smooth: true
-
-                onStatusChanged: {
-                    switch (status) {
-                    case Image.Loading:
-                        imageLoading.running = true
-                        break;
-                    case Image.Ready:
-                        imageLoading.running = false
-                        break;
-                    }
-                }
 
                 MouseArea {
                     anchors.fill: parent

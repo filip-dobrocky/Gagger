@@ -17,16 +17,20 @@ along with Gagger.  If not, see <http://www.gnu.org/licenses/>*/
 import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
+import Ubuntu.Components.Popups 0.1
 import "../JSONListModel"
 
 Item {
     property string section
     property string currentPage: "0"
+    property string listModelUrl: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
 
     //reload current page
     function reload() {
         jsonModel.source = ""
-        jsonModel.source = "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
+        jsonModel.source = listModelUrl
+        jsonPaging.source = ""
+        jsonPaging.source = listModelUrl
     }
 
     //set page to zero and reload
@@ -39,7 +43,7 @@ Item {
         id: activityIndicator
         anchors.centerIn: parent
 
-        running: true
+        running: (list.count > 0) ? false : true
     }
 
     ListView {
@@ -51,7 +55,7 @@ Item {
             rightMargin: units.gu(1)
         }
         spacing: units.gu(1)
-        visible: false
+        visible: (count > 0) ? true : false
 
         cacheBuffer: contentHeight
         clip: true
@@ -80,6 +84,7 @@ Item {
                 }
 
                 UbuntuShape {
+                    id: imageBaseShape
                     width: image.paintedWidth
                     height: image.paintedHeight
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -90,20 +95,15 @@ Item {
 
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
-                        source: (images != undefined) ? images.normal : ""
-
-                        onStatusChanged: {
-                            if (testGifImage != null && status == Image.Ready && testGifImage.status == Image.Loading) {
-                                gifLoading.running = true
-                            }
-                        }
+                        source: (images != undefined) ? images.large : ""
                     }
 
                     ActivityIndicator {
                         id: gifLoading
                         anchors.centerIn: parent
 
-                        running: false
+                        running: (testGifImage != null && image.status == Image.Ready && testGifImage.status == Image.Loading)
+                                 ? true : false
                     }
 
                     Image {
@@ -116,13 +116,9 @@ Item {
 
                         onStatusChanged: {
                             if (status == Image.Error) {
-                                gifLoading.running = false
                                 gifShape.visible = false
                                 destroy()
-                            } else if(status == Image.Loading && image.status == Image.Ready) {
-                                gifLoading.running = true
                             } else if (status == Image.Ready) {
-                                gifLoading.running = false
                                 gifShape.visible = true
                                 destroy()
                             }
@@ -162,6 +158,9 @@ Item {
                                 pageStack.push(Qt.resolvedUrl("../ui/ZoomPage.qml"), {imageUrl: images.large})
                             }
                         }
+
+                        onPressAndHold: PopupUtils.open(popoverComponent, imageBaseShape)
+
                     }
                 }
 
@@ -198,6 +197,23 @@ Item {
                         onClicked: pageStack.push(Qt.resolvedUrl("../ui/CommentsPage.qml"), {postId: id})
                     }
                 }
+
+                Component {
+                    id: popoverComponent
+
+                    Popover {
+                        id: popover
+
+                        ListItem.Standard {
+                            text: i18n.tr("Open post via 9gag.com")
+
+                            onClicked: {
+                                Qt.openUrlExternally("http://m.9gag.com/gag/" + id)
+                                PopupUtils.close(popover)
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -219,34 +235,18 @@ Item {
                 }
             }
         }
-
-        onCountChanged: {
-            if (count > 0) {
-                visible = true
-                activityIndicator.running = false
-            } else {
-                visible = false
-                activityIndicator.running = true
-            }
-        }
-
-    }
-
-    Scrollbar {
-        flickableItem: list
-        align: Qt.AlignTrailing
     }
 
     JSONListModel {
         id: jsonModel
 
-        source: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
+        source: listModelUrl
     }
 
     JSONListModel {
         id: jsonPaging
 
-        source: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
+        source: listModelUrl
         query: "$.paging"
     }
 }

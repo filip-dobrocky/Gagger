@@ -25,7 +25,7 @@ Tab {
         tools: ToolbarItems {
 
             ToolbarButton {
-                text: i18n.tr("About")
+                text: i18n.tr("Help")
                 iconSource: Qt.resolvedUrl("../graphics/help.svg")
                 onTriggered: pageStack.push(Qt.resolvedUrl("../ui/AboutPage.qml"))
             }

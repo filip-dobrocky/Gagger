@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Gagger.  If not, see <http://www.gnu.org/licenses/>*/
 
 import QtQuick 2.0
-import QtWebKit 3.0
 import Ubuntu.Components 0.1
+import Ubuntu.Components.Extras.Browser 0.1
 
 Page {
     property string postId
@@ -38,15 +38,8 @@ Page {
 
         color: "white"
 
-        ActivityIndicator {
-            id: commentsLoading
-            anchors.centerIn: parent
-
-            running: true
-        }
-
-        WebView {
-            id:commentsView
+        UbuntuWebView {
+            id: commentsView
             anchors {
                 fill: parent
                 leftMargin: units.gu(1)
@@ -56,6 +49,12 @@ Page {
             clip: true
             url: "http://comment.9gag.com/comment/list?url=http://9gag.com/gag/"
                  + postId + "&appId=a_dd8f2b7d304a10edaf6f29517ea0ca4100a43d1b&readOnly=1"
+
+            ActivityIndicator {
+                id: commentsLoading
+                anchors.centerIn: parent
+                running: commentsView.loading
+            }
         }
     }
 }

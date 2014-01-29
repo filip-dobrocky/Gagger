@@ -10,3 +10,4 @@ Features:
 - Play GIFs
 - Zoom images
 - View 9gag comments
+- Open posts via 9gag.com

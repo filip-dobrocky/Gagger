@@ -95,7 +95,7 @@ Item {
 
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
-                        source: (images != undefined) ? images.large : ""
+                        source: (images != undefined) ? ((list.width < units.gu(60)) ? images.normal : images.large) : ""
                     }
 
                     ActivityIndicator {

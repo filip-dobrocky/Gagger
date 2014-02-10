@@ -38,7 +38,7 @@ Tab {
             }
         }
 
-        flickable: postList.children[1]
+        flickable: postList.flickable
 
         PostList {
             id: postList

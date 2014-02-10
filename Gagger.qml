@@ -27,7 +27,7 @@ import "ui"
 
 MainView {
     // objectName for functional testing purposes (autopilot-qt5)
-    objectName: "mainView"
+    objectName: "gagger"
 
     // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "com.ubuntu.developer.filip-dobrocky.gagger"

@@ -71,9 +71,9 @@ Page {
 
                 source: imageUrl
                 fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(8192, 8192)
                 asynchronous: true
                 cache: false
-                smooth: true
 
                 MouseArea {
                     anchors.fill: parent

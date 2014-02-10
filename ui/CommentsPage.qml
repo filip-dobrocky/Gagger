@@ -32,9 +32,8 @@ Page {
     }
 
     Rectangle {
-        anchors {
-            fill: parent
-        }
+        id: rectangle
+        anchors.fill: parent
 
         color: "white"
 
@@ -49,11 +48,24 @@ Page {
             clip: true
             url: "http://comment.9gag.com/comment/list?url=http://9gag.com/gag/"
                  + postId + "&appId=a_dd8f2b7d304a10edaf6f29517ea0ca4100a43d1b&readOnly=1"
+        }
 
-            ActivityIndicator {
-                id: commentsLoading
-                anchors.centerIn: parent
-                running: commentsView.loading
+        Rectangle {
+            width: parent.width; height: units.gu(3.5)
+            anchors.top: commentsView.top
+            visible: commentsView.loading
+            color: "#50000000"
+
+            ProgressBar {
+                anchors {
+                    fill: parent
+                    margins: units.gu(0.4)
+                }
+
+                minimumValue: 0
+                maximumValue: 100
+                value: commentsView.loadProgress
+
             }
         }
     }

@@ -14,13 +14,24 @@ Item {
 
     property ListModel model : ListModel { id: jsonModel }
     property alias count: jsonModel.count
+    property bool loaded
+    property bool error
 
     onSourceChanged: {
         var xhr = new XMLHttpRequest;
         xhr.open("GET", source);
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == XMLHttpRequest.DONE)
-                json = xhr.responseText;
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                if (xhr.status == 200) {
+                    loaded = true;
+                    json = xhr.responseText;
+                } else if (xhr.status >= 400 && xhr.status <= 505) {
+                    loaded = false;
+                    error = true;
+                } else
+                    loaded = error = false;
+            } else
+                loaded = error = false;
         }
         xhr.send();
     }

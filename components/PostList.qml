@@ -21,16 +21,15 @@ import Ubuntu.Components.Popups 0.1
 import "../JSONListModel"
 
 Item {
+    property Flickable flickable: list
     property string section
     property string currentPage: "0"
-    property string listModelUrl: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
+    property string pageUrl: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
 
     //reload current page
     function reload() {
-        jsonModel.source = ""
-        jsonModel.source = listModelUrl
-        jsonPaging.source = ""
-        jsonPaging.source = listModelUrl
+        jsonModel.source = jsonPaging.source = ""
+        jsonModel.source = jsonPaging.source = pageUrl
     }
 
     //set page to zero and reload
@@ -43,7 +42,7 @@ Item {
         id: activityIndicator
         anchors.centerIn: parent
 
-        running: (list.count > 0) ? false : true
+        running: !jsonModel.loaded
     }
 
     ListView {
@@ -55,24 +54,22 @@ Item {
             rightMargin: units.gu(1)
         }
         spacing: units.gu(1)
-        visible: (count > 0) ? true : false
+        visible: jsonModel.loaded
 
         cacheBuffer: contentHeight
         clip: true
         model: jsonModel.model
         delegate: ListItem.Empty {
             //there's an undefined property at the end of the model.
-            //haven't found another way to fix it, than using ternary operators each time it assigns a value
+            //haven't found a better way to fix it than using ternary operators each time it assigns a value
 
             width: parent.width; height: (caption != undefined) ? column.height + units.gu(1) : 0
-            visible: (caption != undefined) ? true : false
+            visible: caption != undefined
 
             Column {
                 id: column
                 width: parent.width
                 spacing: units.gu(1)
-                anchors.margins: units.gu(1)
-
 
                 Label {
                     id: captionLabel
@@ -83,46 +80,61 @@ Item {
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
+                ProgressBar {
+                    width: parent.width
+                    visible: imageBaseShape.image.status == Image.Loading
+
+                    value: imageBaseShape.image.progress
+                }
+
                 UbuntuShape {
                     id: imageBaseShape
-                    width: image.paintedWidth
-                    height: image.paintedHeight
+                    width: image.paintedWidth; height: image.paintedHeight
                     anchors.horizontalCenter: parent.horizontalCenter
+                    visible: imageBaseShape.image.status != Image.Loading
 
-                    image: AnimatedImage {
-                        id: image
+                    image: Image {
+                        id: jpgImage
                         width: column.width
 
-                        fillMode: Image.PreserveAspectFit
-                        asynchronous: true
                         source: (images != undefined) ? ((list.width < units.gu(60)) ? images.normal : images.large) : ""
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(8192, 8192)
+                        asynchronous: true
+                    }
+
+                    property int gifVersion: 1
+                    property string gifUrl: "http://d24w6bsrhbeh9d.cloudfront.net/photo/" + id + "_460sa_v" + gifVersion + ".gif"
+
+                    Component.onCompleted: {
+                        var checkGif = new XMLHttpRequest;
+                        checkGif.open("GET", gifUrl)
+                        checkGif.onreadystatechange = function() {
+                            if (checkGif.readyState == XMLHttpRequest.DONE && checkGif.status == 200) {
+                                gifShape.visible = true
+                                gifLoading.running = false
+                            }
+                            else if (checkGif.readyState == XMLHttpRequest.DONE && checkGif.status == 404) {
+                                if (gifVersion == 1) {
+                                    gifVersion = 0
+                                    checkGif.open("GET", gifUrl)
+                                    checkGif.send()
+                                }
+
+                                gifShape.visible = gifLoading.running = false
+                            } else {
+                                gifShape.visible = false
+                                gifLoading.running = true
+                            }
+                        }
+                        checkGif.send()
                     }
 
                     ActivityIndicator {
                         id: gifLoading
                         anchors.centerIn: parent
 
-                        running: (testGifImage != null && image.status == Image.Ready && testGifImage.status == Image.Loading)
-                                 ? true : false
-                    }
-
-                    Image {
-                        //this determines if the image is a gif
-
-                        id: testGifImage
-                        visible: false
-                        source: "http://d24w6bsrhbeh9d.cloudfront.net/photo/" + id + "_460sa.gif"
-                        asynchronous: true
-
-                        onStatusChanged: {
-                            if (status == Image.Error) {
-                                gifShape.visible = false
-                                destroy()
-                            } else if (status == Image.Ready) {
-                                gifShape.visible = true
-                                destroy()
-                            }
-                        }
+                        running: false
                     }
 
                     UbuntuShape {
@@ -145,13 +157,16 @@ Item {
 
                         onClicked: {
                             if (gifShape.visible) {
-                                image.source = "http://d24w6bsrhbeh9d.cloudfront.net/photo/" + id + "_460sa.gif"
-                                if (!image.playing || image.paused) {
-                                    image.playing = true
-                                    image.paused = false
+                                if (imageBaseShape.image == jpgImage) {
+                                    var gifImage = Qt.createComponent("GifImage.qml")
+                                    imageBaseShape.image = gifImage.createObject(null, {"width": column.width,
+                                                                                     "source": imageBaseShape.gifUrl})
+                                    gifShape.opacity = 0
+                                } else if (imageBaseShape.image.paused) {
+                                    imageBaseShape.image.paused = false
                                     gifShape.opacity = 0
                                 } else {
-                                    image.paused = true
+                                    imageBaseShape.image.paused = true
                                     gifShape.opacity = 1
                                 }
                             } else {
@@ -201,16 +216,12 @@ Item {
                 Component {
                     id: popoverComponent
 
-                    Popover {
+                    ActionSelectionPopover {
                         id: popover
 
-                        ListItem.Standard {
+                        actions: Action {
                             text: i18n.tr("Open post via 9gag.com")
-
-                            onClicked: {
-                                Qt.openUrlExternally("http://m.9gag.com/gag/" + id)
-                                PopupUtils.close(popover)
-                            }
+                            onTriggered: Qt.openUrlExternally("http://m.9gag.com/gag/" + id)
                         }
                     }
                 }
@@ -240,13 +251,33 @@ Item {
     JSONListModel {
         id: jsonModel
 
-        source: listModelUrl
+        source: pageUrl
+        onErrorChanged: if (error) PopupUtils.open(errorDialogComponent)
     }
 
     JSONListModel {
         id: jsonPaging
 
-        source: listModelUrl
+        source: pageUrl
         query: "$.paging"
+    }
+
+    Component {
+        id: errorDialogComponent
+
+        Dialog {
+            id: errorDialog
+
+            title: i18n.tr("Error")
+            text: i18n.tr("There was an error loading the page.")
+
+            Button {
+                text: i18n.tr("Reload")
+                onClicked: {
+                    reload()
+                    PopupUtils.close(errorDialog)
+                }
+            }
+        }
     }
 }

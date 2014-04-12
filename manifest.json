@@ -1,15 +1,15 @@
 {
-    "architecture": "all",
+    "name": "com.ubuntu.developer.filip-dobrocky.gagger",
     "description": "An unofficial 9gag.com browser",
-    "framework": "ubuntu-sdk-13.10",
+    "framework": "ubuntu-sdk-14.04-qml-dev1",
+    "architecture": "all",
+    "title": "Gagger",
     "hooks": {
         "Gagger": {
             "apparmor": "Gagger.json",
             "desktop": "Gagger.desktop"
         }
     },
-    "maintainer": "",
-    "name": "com.ubuntu.developer.filip-dobrocky.gagger",
-    "title": "Gagger",
-    "version": "0.1"
+    "version": "0.2.1",
+    "maintainer": "Filip Dobrocký <filip.dobrocky@gmail.com>"
 }

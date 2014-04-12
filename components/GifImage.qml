@@ -4,4 +4,5 @@ AnimatedImage {
     playing: true
     fillMode: Image.PreserveAspectFit
     asynchronous: true
+    opacity: 0
 }

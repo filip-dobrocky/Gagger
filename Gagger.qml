@@ -46,7 +46,7 @@ MainView {
     height: units.gu(75)
 
     PageStack {
-        id:pageStack
+        id: pageStack
         Component.onCompleted: push(tabs)
 
         Tabs {

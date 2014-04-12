@@ -49,7 +49,6 @@ Item {
         id: list
         anchors {
             fill: parent
-            topMargin: units.gu(0.5)
             leftMargin: units.gu(1)
             rightMargin: units.gu(1)
         }
@@ -103,7 +102,7 @@ Item {
                         asynchronous: true
                     }
 
-                    property int gifVersion: 1
+                    property int gifVersion: 2
                     property string gifUrl: "http://d24w6bsrhbeh9d.cloudfront.net/photo/" + id + "_460sa_v" + gifVersion + ".gif"
 
                     Component.onCompleted: {
@@ -115,8 +114,8 @@ Item {
                                 gifLoading.running = false
                             }
                             else if (checkGif.readyState == XMLHttpRequest.DONE && checkGif.status == 404) {
-                                if (gifVersion == 1) {
-                                    gifVersion = 0
+                                if (gifVersion > 0) {
+                                    gifVersion--
                                     checkGif.open("GET", gifUrl)
                                     checkGif.send()
                                 }
@@ -159,7 +158,7 @@ Item {
                             if (gifShape.visible) {
                                 if (imageBaseShape.image == jpgImage) {
                                     var gifImage = Qt.createComponent("GifImage.qml")
-                                    imageBaseShape.image = gifImage.createObject(null, {"width": column.width,
+                                    imageBaseShape.image = gifImage.createObject(parent, {"width": column.width,
                                                                                      "source": imageBaseShape.gifUrl})
                                     gifShape.opacity = 0
                                 } else if (imageBaseShape.image.paused) {
@@ -226,6 +225,10 @@ Item {
                     }
                 }
             }
+        }
+
+        header: Item {
+            width: parent.width; height: units.gu(1)
         }
 
         footer: Item {

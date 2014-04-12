@@ -18,7 +18,7 @@ import QtQuick 2.0
 import Ubuntu.Components 0.1
 
 Tabs {
-    property string version: "0.1"
+    property string version: "0.2.1"
 
     Tab {
         title: i18n.tr("Help")
@@ -105,7 +105,8 @@ Gagger is an <b>unofficial</b> app for browsing <a href=\"http://9gag.com/\">9ga
                     text: "<b>Author:</b> Filip Dobrocký<br>
 <b>Contact:</b> <a href=\"https://plus.google.com/u/0/106056788722129106018/posts\">Filip Dobrocký (Google Plus)</a><br>
 <b>License:</b> <a href=\"http://www.gnu.org/licenses/gpl.txt\">GNU GPL v3</a><br>
-<b>Source code:</b> <a href=\"https://github.com/filip-dobrocky/Gagger\">GitHub</a>"
+<b>Source code:</b> <a href=\"https://github.com/filip-dobrocky/Gagger\">GitHub</a><br>
+<b>Bug tracker:</b> <a href=\"https://github.com/filip-dobrocky/Gagger/issues\">GitHub</a>"
 
                     onLinkActivated: Qt.openUrlExternally(link)
                 }

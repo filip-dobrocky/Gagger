@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Gagger
 Comment=An unofficial 9gag.com browser
-Exec=/usr/bin/qmlscene $@ /usr/share/Gagger/Gagger.qml
+Exec=qmlscene $@ ./Gagger.qml
 Icon=./graphics/Gagger.png
 Terminal=false
 Type=Application

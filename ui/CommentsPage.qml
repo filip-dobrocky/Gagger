@@ -17,6 +17,7 @@ along with Gagger.  If not, see <http://www.gnu.org/licenses/>*/
 import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.Extras.Browser 0.1
+import "../components"
 
 Page {
     property string postId
@@ -50,23 +51,17 @@ Page {
                  + postId + "&appId=a_dd8f2b7d304a10edaf6f29517ea0ca4100a43d1b&readOnly=1"
         }
 
-        Rectangle {
-            width: parent.width; height: units.gu(3.5)
-            anchors.top: commentsView.top
-            visible: commentsView.loading
-            color: "#50000000"
-
-            ProgressBar {
-                anchors {
-                    fill: parent
-                    margins: units.gu(0.4)
-                }
-
-                minimumValue: 0
-                maximumValue: 100
-                value: commentsView.loadProgress
-
+        ThinProgressbar {
+            id: progressBar
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
             }
+            opacity: 0.8
+
+            progress: commentsView.loadProgress
+            visible: commentsView.loading
         }
     }
 }

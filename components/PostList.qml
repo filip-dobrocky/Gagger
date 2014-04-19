@@ -65,6 +65,13 @@ Item {
             width: parent.width; height: (caption != undefined) ? column.height + units.gu(1) : 0
             visible: caption != undefined
 
+            /*onWidthChanged: {
+                if (imageBaseShape.image.playing != undefined && imageBaseShape.image.playing) {
+                    imageBaseShape.image = jpgImage
+                    gifShape.opacity = 1
+                }
+            }*/
+
             Column {
                 id: column
                 width: parent.width

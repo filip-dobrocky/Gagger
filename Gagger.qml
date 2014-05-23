@@ -45,6 +45,9 @@ MainView {
     width: units.gu(45)
     height: units.gu(75)
 
+    useDeprecatedToolbar: false
+
+
     PageStack {
         id: pageStack
         Component.onCompleted: push(tabs)

@@ -24,7 +24,7 @@ Item {
     property Flickable flickable: list
     property string section
     property string currentPage: "0"
-    property string pageUrl: "http://infinigag.eu01.aws.af.cm/" + section + "/" + currentPage
+    property string pageUrl: "http://infinigag-us.aws.af.cm/" + section + "/" + currentPage
 
     //reload current page
     function reload() {

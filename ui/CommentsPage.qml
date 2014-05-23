@@ -16,7 +16,8 @@ along with Gagger.  If not, see <http://www.gnu.org/licenses/>*/
 
 import QtQuick 2.0
 import Ubuntu.Components 0.1
-import Ubuntu.Components.Extras.Browser 0.1
+import Ubuntu.Components.Extras.Browser 0.2
+
 import "../components"
 
 Page {
@@ -25,10 +26,12 @@ Page {
     title: i18n.tr("Comments")
     tools: ToolbarItems {
         ToolbarButton {
-            text: i18n.tr("Refresh")
-            iconSource: Qt.resolvedUrl("../graphics/reload.svg")
+            action: Action {
+                text: i18n.tr("Refresh")
+                iconName: "reload"
 
-            onTriggered: commentsView.reload()
+                onTriggered: commentsView.reload()
+            }
         }
     }
 

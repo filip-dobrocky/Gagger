@@ -21,27 +21,34 @@ Page {
     property string imageUrl
     property bool zoomed: false
 
+    title: " "
+    flickable: imageFlickable
+
     tools: ToolbarItems {
         ToolbarButton {
-            text: i18n.tr("Zoom in")
-            iconSource: "../graphics/zoom_in.svg"
+            action: Action {
+                text: i18n.tr("Zoom in")
+                iconSource: "../graphics/zoom_in.svg"
 
-            onTriggered: {
-                image.width += rectangle.width * 0.2
-                image.height += rectangle.height * 0.2
-                zoomed = false
+                onTriggered: {
+                    image.width += rectangle.width * 0.2
+                    image.height += rectangle.height * 0.2
+                    zoomed = false
+                }
             }
         }
 
         ToolbarButton {
-            text: i18n.tr("Zoom out")
-            iconSource: "../graphics/zoom_out.svg"
+            action: Action {
+                text: i18n.tr("Zoom out")
+                iconSource: "../graphics/zoom_out.svg"
 
-            onTriggered: {
-                if (image.width > rectangle.width && image.height > rectangle.height) {
-                    image.width -= rectangle.width * 0.2
-                    image.height -= rectangle.height * 0.2
-                    zoomed = false
+                onTriggered: {
+                    if (image.width > rectangle.width && image.height > rectangle.height) {
+                        image.width -= rectangle.width * 0.2
+                        image.height -= rectangle.height * 0.2
+                        zoomed = false
+                    }
                 }
             }
         }
@@ -63,6 +70,7 @@ Page {
             id: imageFlickable
             anchors.fill: parent
             contentWidth: image.width; contentHeight: image.height
+
 
             Image {
                 id: image

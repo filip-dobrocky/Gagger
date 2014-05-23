@@ -24,17 +24,20 @@ Tab {
 
     page: Page {
         tools: ToolbarItems {
-
             ToolbarButton {
-                text: i18n.tr("Help")
-                iconSource: Qt.resolvedUrl("../graphics/help.svg")
-                onTriggered: pageStack.push(Qt.resolvedUrl("../ui/AboutPage.qml"))
+                action: Action {
+                    text: i18n.tr("Help")
+                    iconName: "help"
+                    onTriggered: pageStack.push(Qt.resolvedUrl("../ui/AboutPage.qml"))
+                }
             }
 
             ToolbarButton {
-                text: i18n.tr("Refresh")
-                iconSource: Qt.resolvedUrl("../graphics/reload.svg")
-                onTriggered: postList.refresh()
+                action: Action {
+                    text: i18n.tr("Refresh")
+                    iconName: "reload"
+                    onTriggered: postList.refresh()
+                }
             }
         }
 
